@@ -20,6 +20,7 @@ allowed_hosts_env = os.getenv('ALLOWED_HOST_RENDER', '')
 
 # Split the allowed_hosts_env by comma to create a list of allowed hosts
 ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else []
+ALLOWED_HOSTS.append('tripma-core.onrender.com')
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'

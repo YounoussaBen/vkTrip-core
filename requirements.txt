@@ -7,7 +7,7 @@ charset-normalizer==3.3.2
 cryptography==42.0.6
 defusedxml==0.8.0rc2
 dj-database-url==2.1.0
-Django==5.0.4
+Django==4.0.2
 django-cors-headers==4.3.1
 django-extensions==3.2.3
 django-oauth-toolkit==2.3.0

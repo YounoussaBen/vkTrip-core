@@ -2,5 +2,5 @@ from django.urls import path
 from .views import PaymentAPI
 
 urlpatterns = [
-    path('stripe', PaymentAPI.as_view(), name='stripe_payment')
+    path('visa-card', PaymentAPI.as_view(), name='visa_card_payment')
 ]

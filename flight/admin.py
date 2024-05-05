@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Flight, Location, Stepover
+from .models import Flight, Location, Stepover, Airline
 from datetime import timedelta
 
 class LocationAdmin(admin.ModelAdmin):
@@ -10,6 +10,11 @@ class LocationAdmin(admin.ModelAdmin):
 
 admin.site.register(Location, LocationAdmin)
 
+class AirlineAdmin(admin.ModelAdmin):
+    list_display = ['name', 'logo']
+    search_fields = ['name', 'logo']
+
+admin.site.register(Airline, AirlineAdmin)
 class DurationWidget(forms.MultiWidget):
     def __init__(self, attrs=None):
         widgets = [
@@ -54,6 +59,7 @@ class StepoverInline(admin.TabularInline):
 
 class FlightForm(forms.ModelForm):
     num_tickets = forms.IntegerField(label=_('Number of Available Tickets'), required=True)
+    airline = forms.ModelChoiceField(queryset=Airline.objects.all(), label=_('Airline Name'))
 
     class Meta:
         model = Flight
@@ -62,7 +68,7 @@ class FlightForm(forms.ModelForm):
 class FlightAdmin(admin.ModelAdmin):
     inlines = [StepoverInline]
     autocomplete_fields = ['departure_location', 'arrival_location'] 
-    list_display = ['departure_location', 'arrival_location', 'departure_datetime', 'return_datetime', 'base_price', 'checked_bag_price']
+    list_display = ['airline', 'departure_location', 'arrival_location', 'departure_datetime', 'flight_duration', 'passenger_type', 'flight_class', 'base_price', 'checked_bag_price']
     form = FlightForm
 
     def save_model(self, request, obj, form, change):

@@ -1,4 +1,4 @@
-ch# Tripma API
+# Tripma API
 
 The Tripma API serves as the backbone of our air ticket booking platform, allowing users to effortlessly browse, select, and reserve flight tickets through our website. 
 

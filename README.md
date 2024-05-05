@@ -6,7 +6,8 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
 ## Prerequisites
 
 - Python 3.9 or later
-- PostgreSQL database
+- MySQL database (for local development)
+- PostgreSQL database (for deployment)
 - Virtual environment (recommended)
 
 ## Getting Started
@@ -53,6 +54,18 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
 5. **Configure the Environment Variables:**
    
    Update the `.env.example` file with your configuration and rename it to `.env`. Fill in the necessary details such as the secret key and database configuration:
+
+   - For local development, set the following MySQL environment variables:
+     ```
+     DB_ENGINE=mysql
+     DB_NAME=your_database_name
+     DB_USER=your_mysql_username
+     DB_PASSWORD=your_mysql_password
+     DB_HOST=localhost
+     DB_PORT=3306
+     ```
+   - For production deployment, ensure you have a `DATABASE_URL` environment variable set with your PostgreSQL connection details.
+
 
 6. **Make Migrations:**
    

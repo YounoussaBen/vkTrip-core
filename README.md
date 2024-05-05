@@ -16,7 +16,7 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
    Clone the project repository to your local machine:
    
    ```shell
-   git clone https://github.com/YounoussaBen/IMS_CORE.git
+   git clone https://github.com/YounoussaBen/tripma-core.git
    ```
 
 2. **Create a Virtual Environment:**
@@ -24,7 +24,7 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
    Navigate to the project directory and create a virtual environment:
 
    ```shell
-   cd IMS_CORE
+   cd tripma-core
    python3 -m venv venv
    ```
 

@@ -20,3 +20,4 @@ class Booking(BaseModel):
     flights = models.ManyToManyField(Flight, related_name='bookings')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     checked_bags = models.PositiveIntegerField(default=0)
+    status = models.BooleanField(default=False)

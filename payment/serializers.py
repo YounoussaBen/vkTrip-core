@@ -30,3 +30,4 @@ class CardInformationSerializer(serializers.Serializer):
     expiry_month = serializers.CharField(max_length=2, required=True, validators=[CheckExpiryMonth()])
     expiry_year = serializers.CharField(max_length=4, required=True, validators=[CheckExpiryYear()])
     cvc = serializers.CharField(max_length=4, required=True, validators=[CheckCVC()])
+    card_token = serializers.CharField(max_length=150, required=True)  # Add card_token field

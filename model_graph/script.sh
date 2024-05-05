@@ -1,0 +1,1 @@
+python ./manage.py graph_models --exclude-models=*Abstract* --no-inheritance --hide-relations-from-fields -a --rankdir BT -o ./model_graph/ER_Diagram.png

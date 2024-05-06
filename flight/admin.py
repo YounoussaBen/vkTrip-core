@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Flight, Location, Stepover, Airline
+from .models import Flight, Location, Stepover, Airline, Ticket
 from datetime import timedelta
+
+
+admin.site.register(Ticket)
 
 class LocationAdmin(admin.ModelAdmin):
     list_display = ['airport_name', 'country']
@@ -40,7 +43,7 @@ class FlightForm(forms.ModelForm):
 class FlightAdmin(admin.ModelAdmin):
     inlines = [StepoverInline]
     autocomplete_fields = ['departure_location', 'arrival_location'] 
-    list_display = ['airline', 'departure_location', 'arrival_location', 'departure_datetime', 'flight_duration', 'passenger_type', 'flight_class', 'base_price', 'checked_bag_price']
+    list_display = ['airline', 'departure_location', 'arrival_location', 'departure_datetime', 'flight_duration', 'passenger_type', 'flight_class', 'base_price', 'checked_bag_price', 'available_tickets']
     form = FlightForm
 
     def save_model(self, request, obj, form, change):

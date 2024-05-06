@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from datetime import datetime
 from django.db.models import Q
-
+from itertools import chain
 
 class FlightListCreateAPIView(generics.ListCreateAPIView):
     queryset = Flight.objects.all()
@@ -38,28 +38,34 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
         flight_class = self.request.query_params.get('flight_class')
         passenger_type = self.request.query_params.get('passenger_type')
 
-        queryset = Flight.objects.filter(
-            Q(departure_location__airport_name=departure_location) &
-            Q(arrival_location__airport_name=arrival_location) &
-            Q(departure_datetime__date=departure_time) &
-            Q(flight_class=flight_class) &
-            Q(passenger_type=passenger_type)
-        ) | Flight.objects.filter(
-            Q(departure_location__airport_name=arrival_location) &
-            Q(arrival_location__airport_name=departure_location) &
-            Q(departure_datetime__date=return_time) &
-            Q(flight_class=flight_class) &
-            Q(passenger_type=passenger_type)
+        # Filter outbound flights
+        outbound_flights = Flight.objects.filter(
+            departure_location__airport_name=departure_location,
+            arrival_location__airport_name=arrival_location,
+            departure_datetime__date=departure_time,
+            flight_class=flight_class,
+            passenger_type=passenger_type,
+            tickets__is_booked=False
         )
-        # Filter out flights with zero available tickets
-        queryset = queryset.filter(tickets__is_booked=False).distinct()
+
+        # Filter return flights
+        return_flights = Flight.objects.filter(
+            departure_location__airport_name=arrival_location,
+            arrival_location__airport_name=departure_location,
+            departure_datetime__date=return_time,
+            flight_class=flight_class,
+            passenger_type=passenger_type,
+            tickets__is_booked=False
+        )
+
+        # Combine both outbound and return flights
+        queryset = list(chain(outbound_flights, return_flights))
 
         return queryset
 
 class FlightSearchAPIView(generics.ListAPIView):
     serializer_class = FlightSerializer
     permission_classes = [permissions.AllowAny]
-
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -77,19 +83,14 @@ class FlightSearchAPIView(generics.ListAPIView):
         flight_class = self.request.query_params.get('flight_class')
         passenger_type = self.request.query_params.get('passenger_type')
 
-        queryset = Flight.objects.all()
-
-        if departure_location:
-            queryset = queryset.filter(departure_location__airport_name=departure_location)
-        if arrival_location:
-            queryset = queryset.filter(arrival_location__airport_name=arrival_location)
-        if departure_time:
-            departure_time = datetime.strptime(departure_time, '%Y-%m-%d')
-            queryset = queryset.filter(departure_datetime__date=departure_time.date())
-        if flight_class:
-            queryset = queryset.filter(flight_class=flight_class)
-        if passenger_type:
-            queryset = queryset.filter(passenger_type=passenger_type)
+        # Filter flights based on all mandatory parameters
+        queryset = Flight.objects.filter(
+            departure_location__airport_name=departure_location,
+            arrival_location__airport_name=arrival_location,
+            departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
+            flight_class=flight_class,
+            passenger_type=passenger_type,
+        )
 
         # Filter out flights with zero available tickets
         queryset = queryset.filter(tickets__is_booked=False).distinct()

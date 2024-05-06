@@ -6,6 +6,7 @@ from django.conf import settings
 from .models import Payment
 from .serializers import PaymentSerializer
 from booking.models import Booking
+from flight.models import Ticket
 
 class PaymentAPI(APIView):
     serializer_class = PaymentSerializer
@@ -42,23 +43,43 @@ class PaymentAPI(APIView):
                     booking.status = True
                     booking.save()
 
-                    # Save payment record
-                    payment = Payment.objects.create(
-                        booking_id=booking,
-                        user=request.user,  # Assuming user is authenticated
-                        total_price=data['total_price'],
-                        payment_status=Payment.SUCCESS,
-                        payment_intent_id=payment_intent['id'],
-                        payment_method_id=payment_method['id'],
-                        card_token=data['card_token'],
-                    )
+                    flights = booking.flights.all()  # Retrieve all associated flights
 
-                    response_data = {
-                        'message': "Card Payment Success",
-                        'status': status.HTTP_200_OK,
-                        "payment": PaymentSerializer(payment).data
-                    }
-                    return Response(response_data)
+                    # Since there can be multiple flights, loop through them
+                    for flight in flights:
+                        # Update each flight's available tickets
+                        tickets = Ticket.objects.filter(flight=flight, is_booked=False)
+                        if tickets.exists():
+                            ticket_to_book = tickets.first()
+                            ticket_to_book.is_booked = True
+                            ticket_to_book.save()
+
+                        # Save payment record
+                        payment = Payment.objects.create(
+                            booking_id=booking,
+                            user=request.user,  # Assuming user is authenticated
+                            total_price=data['total_price'],
+                            payment_status=Payment.SUCCESS,
+                            payment_intent_id=payment_intent['id'],
+                            payment_method_id=payment_method['id'],
+                            card_token=data['card_token'],
+                        )
+
+                        response_data = {
+                            'message': "Card Payment Success",
+                            'status': status.HTTP_200_OK,
+                            "payment": PaymentSerializer(payment).data
+                        }
+                        return Response(response_data)
+                    else:
+                        # If no available tickets, revert booking status
+                        booking.status = False
+                        booking.save()
+                        response_data = {
+                            'message': "No available tickets for this flight.",
+                            'status': status.HTTP_400_BAD_REQUEST,
+                        }
+                        return Response(response_data)
                 else:
                     response_data = {
                         'message': "Card Payment Failed",

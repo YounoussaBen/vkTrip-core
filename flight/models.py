@@ -50,7 +50,7 @@ class Ticket(BaseModel):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='tickets')
     is_booked = models.BooleanField(default=False)
 
-class Stepover(BaseModel):
+class Stopover(BaseModel):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='stepovers')
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     duration = models.DurationField()

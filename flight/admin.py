@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from .models import Flight, Location, Stepover, Airline, Ticket
+from .models import Flight, Location, Stopover, Airline, Ticket
 from datetime import timedelta
 
 
@@ -21,14 +21,14 @@ admin.site.register(Airline, AirlineAdmin)
 
 class StepoverForm(forms.ModelForm):
     class Meta:
-        model = Stepover
+        model = Stopover
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['duration'].initial = '00:00:00'
 class StepoverInline(admin.TabularInline):
-    model = Stepover
+    model = Stopover
     form = StepoverForm
     extra = 1
 
@@ -57,4 +57,4 @@ class StepoverAdmin(admin.ModelAdmin):
     search_fields = ['location__airport_name', 'location__country']
 
 admin.site.register(Flight, FlightAdmin)
-admin.site.register(Stepover, StepoverAdmin)
+admin.site.register(Stopover, StepoverAdmin)

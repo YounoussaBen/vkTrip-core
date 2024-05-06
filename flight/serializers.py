@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Flight, Stepover, Location, Airline
+from .models import Flight, Stopover, Location, Airline
 
 class AirlineSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +16,7 @@ class StepoverSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
 
     class Meta:
-        model = Stepover
+        model = Stopover
         read_only_fields = [ "created", "updated"]
         fields = ["id", 'location', 'duration']
 

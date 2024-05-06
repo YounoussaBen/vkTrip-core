@@ -15,11 +15,9 @@ DATABASES = {
 }
 
 # Retrieve ALLOWED_HOSTS from the environment variable
-# Use an empty string as the default value if ALLOWED_HOSTS_RENDER is not set
-allowed_hosts_env = os.getenv('ALLOWED_HOSTS_RENDER', '')
 
 # Split the allowed_hosts_env by comma to create a list of allowed hosts
-ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else []
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS_RENDER')]
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'

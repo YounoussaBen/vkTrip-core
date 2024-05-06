@@ -16,6 +16,7 @@ class FlightListCreateAPIView(generics.ListCreateAPIView):
 
 class RoundTripFlightSearchAPIView(generics.ListAPIView):
     serializer_class = FlightSerializer
+    permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -53,6 +54,8 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
 
 class FlightSearchAPIView(generics.ListAPIView):
     serializer_class = FlightSerializer
+    permission_classes = [permissions.AllowAny]
+
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -90,7 +93,9 @@ class FlightSearchAPIView(generics.ListAPIView):
 class FlightRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
+    permission_classes = [permissions.AllowAny]
 
 class LocationListAPIView(generics.ListAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    permission_classes = [permissions.AllowAny]

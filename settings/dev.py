@@ -34,7 +34,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',  # This is your localhost
     'localhost',  # This is another form of localhost
-    '172.18.0.1'
+    '172.18.0.1',
+    'tripma-core.onrender.com',
+
 ]
 
 

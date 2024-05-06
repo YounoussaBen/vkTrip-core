@@ -14,11 +14,6 @@ DATABASES = {
     'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600),
 }
 
-# Retrieve ALLOWED_HOSTS from the environment variable
-
-# Split the allowed_hosts_env by comma to create a list of allowed hosts
-ALLOWED_HOSTS = ['tripma-core.onrender.com']
-
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 

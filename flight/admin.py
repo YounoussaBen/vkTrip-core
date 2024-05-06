@@ -15,43 +15,15 @@ class AirlineAdmin(admin.ModelAdmin):
     search_fields = ['name', 'logo']
 
 admin.site.register(Airline, AirlineAdmin)
-class DurationWidget(forms.MultiWidget):
-    def __init__(self, attrs=None):
-        widgets = [
-            forms.NumberInput(attrs={'placeholder': 'Days'}),
-            forms.NumberInput(attrs={'placeholder': 'Hours'}),
-            forms.NumberInput(attrs={'placeholder': 'Minutes'}),
-        ]
-        super().__init__(widgets, attrs)
-
-    def decompress(self, value):
-        if value:
-            return [value.days, value.seconds // 3600, (value.seconds // 60) % 60]
-        return [None, None, None]
-
-class DurationFormField(forms.MultiValueField):
-    widget = DurationWidget
-
-    def __init__(self, *args, **kwargs):
-        fields = (
-            forms.IntegerField(),
-            forms.IntegerField(),
-            forms.IntegerField(),
-        )
-        super().__init__(fields, *args, **kwargs)
-
-    def compress(self, data_list):
-        if data_list:
-            return timedelta(days=data_list[0], hours=data_list[1], minutes=data_list[2])
-        return None
 
 class StepoverForm(forms.ModelForm):
-    duration = DurationFormField(required=False)
-
     class Meta:
         model = Stepover
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['duration'].initial = '00:00:00'
 class StepoverInline(admin.TabularInline):
     model = Stepover
     form = StepoverForm

@@ -4,21 +4,21 @@ from .models import Flight, Stepover, Location, Airline
 class AirlineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airline
-        read_only_fields = ["id", "created", "updated"]
-        fields = ['name', 'logo']
+        read_only_fields = [ "created", "updated"]
+        fields = ["id", 'name', 'logo']
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        read_only_fields = ["id", "created", "updated"]
-        fields = ['airport_name', 'country']
+        read_only_fields = [ "created", "updated"]
+        fields = ["id", 'airport_name', 'country']
 
 class StepoverSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
 
     class Meta:
         model = Stepover
-        read_only_fields = ["id", "created", "updated"]
-        fields = ['location', 'duration']
+        read_only_fields = [ "created", "updated"]
+        fields = ["id", 'location', 'duration']
 
 class FlightSerializer(serializers.ModelSerializer):
     departure_location = LocationSerializer()
@@ -29,9 +29,9 @@ class FlightSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Flight
-        read_only_fields = ["id", "created", "updated"]
-        fields = ['airline','departure_location', 'arrival_location', 'departure_datetime',
-                    'base_price', 'passenger_type', 'flight_class', 'checked_bag_price', 'stepovers', 'num_tickets']
+        read_only_fields = [ "created", "updated"]
+        fields = ["id", 'airline','departure_location', 'arrival_location', 'departure_datetime',
+                    'base_price', 'passenger_type', 'flight_class', 'checked_bag_price', 'stepovers', 'num_tickets', 'available_tickets']
 
     def create(self, validated_data):
         num_tickets = validated_data.pop('num_tickets')  # Pop out num_tickets field

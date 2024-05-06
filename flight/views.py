@@ -1,7 +1,7 @@
 # views.py
 from rest_framework import generics, permissions
-from .models import Flight, Location
-from .serializers import FlightSerializer, LocationSerializer
+from .models import Flight, Location, Airline
+from .serializers import FlightSerializer, LocationSerializer, AirlineSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from datetime import datetime
@@ -12,7 +12,9 @@ class FlightListCreateAPIView(generics.ListCreateAPIView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    
+    def get_queryset(self):
+        return Flight.objects.filter(tickets__is_booked=False).distinct()
 
 class RoundTripFlightSearchAPIView(generics.ListAPIView):
     serializer_class = FlightSerializer
@@ -49,6 +51,8 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
             Q(flight_class=flight_class) &
             Q(passenger_type=passenger_type)
         )
+        # Filter out flights with zero available tickets
+        queryset = queryset.filter(tickets__is_booked=False).distinct()
 
         return queryset
 
@@ -86,6 +90,9 @@ class FlightSearchAPIView(generics.ListAPIView):
             queryset = queryset.filter(flight_class=flight_class)
         if passenger_type:
             queryset = queryset.filter(passenger_type=passenger_type)
+
+        # Filter out flights with zero available tickets
+        queryset = queryset.filter(tickets__is_booked=False).distinct()
 
         return queryset
 

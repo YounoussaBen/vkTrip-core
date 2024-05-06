@@ -35,9 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',  # This is your localhost
     'localhost',  # This is another form of localhost
-    '172.18.0.1',
-    'tripma-core.onrender.com',
-
+    'tripma-core.onrender.com',  # This is the domain of your Render app
 ]
 
 
@@ -142,20 +140,20 @@ WSGI_APPLICATION = 'base.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": os.getenv("DB_NAME"),
-#         "USER": os.getenv("DB_USER"),
-#         "PASSWORD": os.getenv("DB_PASSWORD"),
-#         "HOST": os.getenv("DB_HOST"),
-#         "PORT": os.getenv("DB_PORT"),
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600),
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600),
+# }
 
 
 # Password validation

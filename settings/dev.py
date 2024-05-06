@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv()
@@ -141,29 +142,21 @@ WSGI_APPLICATION = 'base.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.getenv("DB_NAME"),
+#         "USER": os.getenv("DB_USER"),
+#         "PASSWORD": os.getenv("DB_PASSWORD"),
+#         "HOST": os.getenv("DB_HOST"),
+#         "PORT": os.getenv("DB_PORT"),
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-    }
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600),
 }
 
-# if os.environ.get('GITHUB_WORKFLOW'):
-#     DATABASES = {
-#         'default': {
-#            'ENGINE': 'django.db.backends.postgresql',
-#            'NAME': 'github_actions',
-#            'USER': 'postgres',
-#            'PASSWORD': 'postgres',
-#            'HOST': '127.0.0.1',
-#            'PORT': '5432',
-#         }
-#     }
-  
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

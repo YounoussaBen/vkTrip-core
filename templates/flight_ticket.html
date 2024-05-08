@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Air e-Ticket & Itinerary</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #000;
+  }
+  .container {
+    max-width: 800px;
+    max-height: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* Changed to a darker tone */
+    overflow: hidden;
+  }
+
+  .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  max-width: 180px;
+  margin-right: 10px;
+}
+
+.airline-info h1,
+.tripma-brand {
+  font-size: 18px;
+  font-weight: bold;
+  color: #004080; /* Darker blue */
+}
+
+.tripma-info {
+  text-align: center; /* Center align the contents */
+}
+
+.tripma-info i {
+  font-size: 2em; /* Adjust icon size */
+}
+
+.tripma-slogan {
+  color: #555;
+}
+
+.barcode {
+  text-align: right; /* Align the barcode to the right */
+}
+
+.barcode img {
+  max-width: 200px;
+}
+
+  h1, h2, p {
+    margin: 0;
+    padding: 0;
+  }
+  .ticket-details {
+    margin-bottom: 20px;
+  }
+  .table-title {
+    background-color: #004080; /* Darker blue */
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #004080; /* Darker blue */
+    color: #fff;
+  }
+  td {
+    background-color: #e6e6e6; /* Lighter grey background */
+  }
+  .class-info {
+    margin-top: 5px;
+    font-style: italic;
+    color: #666;
+  }
+  
+  .footer p {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0;
+  }
+  .footer a {
+    color: #004080; /* Darker blue */
+    text-decoration: none;
+  }
+  .tripma-slogan {
+  color: #004080; /* Darker blue */
+  font-size: 24px; /* Adjust the font size */
+  font-style: italic; /* Make it italic */
+  background-image: linear-gradient(to right, #004080, #0066FF); /* Gradient background */
+  -webkit-background-clip: text; /* Clip text to background */
+  -webkit-text-fill-color: transparent; /* Hide the text fill */
+}
+
+
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="airline-info">
+      <i class="fas fa-plane fa-2x"></i>
+    </div>
+    <div class="tripma-info">
+      <div class="tripma-slogan">It's more than just a trip</div>
+    </div>    
+    <div class="barcode">
+      <i class="fas fa-plane fa-2x"></i>
+    </div>  
+  </div>
+  <div class="ticket-details">
+    <div class="table-title">Passenger Information <i class="fas fa-user"></i></div>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Ticket Number</th>
+        <th>Booking Reference</th>
+      </tr>
+      {% for passenger in booking.passengers.all %}
+      <tr>
+        <td>{{ passenger.FirstName }} {{ passenger.MiddleName|default:"" }} {{ passenger.LastName }}</td>
+        <td>
+          {{ booked_ticket.id }}
+        </td>
+        <td>{{ booking.id }}</td>
+      </tr>
+      {% endfor %}
+    </table>        
+  </div>
+  <div class="ticket-details">
+    <div class="table-title"><i class="fas fa-map-marker-alt"></i> Itinerary</div>
+    <table>
+      <tr>
+        <th>From <i class="fas fa-plane-departure"></i></th>
+        <th>To <i class="fas fa-plane-arrival"></i></th>
+        <th>Flight <i class="fas fa-plane"></i></th>
+      </tr>
+      <tr>
+        <td>{{ booking.flights.first.departure_location.airport_name }} ({{ booking.flights.first.departure_location.country }})</td>
+        <td>{{ booking.flights.first.arrival_location.airport_name }} ({{ booking.flights.first.arrival_location.country }})</td>
+        <td>{{ booking.flights.first.id }}</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="class-info">Class: {{ booking.flights.first.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Departure: {{ booking.flights.first.departure_datetime|date:"Y-m-d, H:i" }} | Duration: {{ booking.flights.first.flight_duration }} | Airline: {{ booking.flights.first.airline.name }}</td>
+      </tr>
+      {% if booking.trip_type == "Round Trip" %}
+      <tr>
+        <td>{{ booking.flights.last.departure_location.airport_name }} ({{ booking.flights.last.departure_location.country }})</td>
+        <td>{{ booking.flights.last.arrival_location.airport_name }} ({{ booking.flights.last.arrival_location.country }})</td>
+        <td>{{ booking.flights.last.id }}</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="class-info">Class: {{ booking.flights.last.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Departure: {{ booking.flights.last.departure_datetime|date:"Y-m-d, H:i" }} | Duration: {{ booking.flights.last.flight_duration }} | Airline: {{ booking.flights.last.airline.name }}</td>
+      </tr>
+      {% endif %}
+    </table>
+  </div>
+  <div class="footer">
+    <p>* Schedules and aircraft type may be changed without prior notice.</p>
+    <p>* For our policy, please visit <a href="#">here</a>.</p>
+  </div>
+
+</div>
+</body>
+</html>

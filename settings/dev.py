@@ -35,7 +35,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',  # This is your localhost
     'localhost',  # This is another form of localhost
-    'tripma-core.onrender.com',  # This is the domain of your Render app
+    'vktrip-core.onrender.com',  # This is the domain of your Render app
 ]
 
 

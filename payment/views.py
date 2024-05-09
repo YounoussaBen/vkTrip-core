@@ -14,7 +14,7 @@ from flight.models import Ticket
 
 class PaymentAPI(APIView):
     serializer_class = PaymentSerializer
-
+        
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():

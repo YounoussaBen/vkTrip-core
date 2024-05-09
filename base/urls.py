@@ -26,9 +26,9 @@ from django.conf.urls.static import static
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Tripma API",
+      title="vkTrip API",
       default_version='v1',
-      description="Tripma API Description",
+      description="vkTrip API Description",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@yourapi.local"),
       license=openapi.License(name="BSD License"),

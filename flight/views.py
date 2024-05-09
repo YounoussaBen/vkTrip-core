@@ -11,7 +11,7 @@ from itertools import chain
 class FlightListCreateAPIView(generics.ListCreateAPIView):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     
     def get_queryset(self):
         return Flight.objects.filter(tickets__is_booked=False).distinct()

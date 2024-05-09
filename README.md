@@ -1,6 +1,6 @@
-# Tripma API
+# vkTrip API
 
-The Tripma API serves as the backbone of our air ticket booking platform, allowing users to effortlessly browse, select, and reserve flight tickets through our website. 
+The vkTrip API serves as the backbone of our air ticket booking platform, allowing users to effortlessly browse, select, and reserve flight tickets through our website. 
 
 
 ## Prerequisites
@@ -17,7 +17,7 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
    Clone the project repository to your local machine:
    
    ```shell
-   git clone https://github.com/YounoussaBen/tripma-core.git
+   git clone https://github.com/YounoussaBen/vkTrip-core.git
    ```
 
 2. **Create a Virtual Environment:**
@@ -25,7 +25,7 @@ The Tripma API serves as the backbone of our air ticket booking platform, allowi
    Navigate to the project directory and create a virtual environment:
 
    ```shell
-   cd tripma-core
+   cd vkTrip-core
    python3 -m venv venv
    ```
 

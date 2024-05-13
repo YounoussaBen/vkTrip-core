@@ -6,7 +6,7 @@ class EmergencyContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyContact
         read_only_fields = ["id", "created", "updated"]
-        fields = ['FirstName', 'LastName', 'Email', 'PhoneNumber']
+        fields = ['FullName', 'Email', 'PhoneNumber']
 
 
 class PassengerSerializer(serializers.ModelSerializer):

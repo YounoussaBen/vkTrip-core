@@ -16,3 +16,6 @@ python manage.py collectstatic --no-input
 
 # Apply database migrations
 python manage.py migrate
+
+# Populate flight
+python manage.py generate_flights 100000

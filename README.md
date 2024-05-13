@@ -88,11 +88,18 @@ The vkTrip API serves as the backbone of our air ticket booking platform, allowi
 8. **Importing Airport Data:**
 
 
-```shell
-python manage.py import_airports data/airports_by_country.csv
+   ```shell
+   python manage.py import_airports data/airports_by_country.csv
    ```
 
-9. **Run the Development Server:**
+9. **Create Flights:**
+
+
+   ```shell 
+   python manage.py generate_flights <num_flights>
+   ```
+
+10. **Run the Development Server:**
    
    Start the Django development server:
 

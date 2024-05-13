@@ -18,4 +18,4 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 
 # Populate flight
-python manage.py generate_flights 100000
+# python manage.py generate_flights 1000

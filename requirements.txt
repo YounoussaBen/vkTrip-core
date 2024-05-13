@@ -37,6 +37,7 @@ Levenshtein==0.25.1
 MarkupSafe==2.1.5
 mysqlclient==2.2.4
 oauthlib==3.2.2
+Faker==25.2.0
 packaging==24.0
 pdfkit==1.0.0
 pillow==10.3.0

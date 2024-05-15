@@ -1,4 +1,4 @@
-from authentication.models import User
+from account.models import User
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):

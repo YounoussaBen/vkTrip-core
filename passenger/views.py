@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .models import Passenger
 from .serializers import PassengerSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
 
 class PassengerListCreateAPIView(generics.ListCreateAPIView):
@@ -13,4 +13,4 @@ class PassengerListCreateAPIView(generics.ListCreateAPIView):
 class PassengerRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Passenger.objects.all()
     serializer_class = PassengerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]

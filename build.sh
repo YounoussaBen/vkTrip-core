@@ -27,4 +27,4 @@ python manage.py import_airports data/airports_by_country.csv
 python manage.py create_airlines
 
 # Populate flight
-python manage.py generate_flights 10000
+python manage.py generate_flights 1000

@@ -1,5 +1,3 @@
-# generate_random_flights.py
-
 import random
 import datetime
 from faker import Faker
@@ -29,8 +27,10 @@ class Command(BaseCommand):
         arrival_location = Location.objects.exclude(id=departure_location.id).order_by('?').first()
         
         # Set departure date within the specified range
-        departure_datetime = fake.date_time_between(start_date="-1m", end_date="+1m")
-
+        start_date = datetime.datetime.now() - datetime.timedelta(days=30)
+        end_date = datetime.datetime.now() + datetime.timedelta(days=30)
+        departure_date = fake.date_time_between_dates(start_date=start_date, end_date=end_date)
+        
         flight_duration = datetime.timedelta(hours=random.randint(1, 24), minutes=random.randint(0, 59))
         base_price = round(random.uniform(50, 1000), 2)
         passenger_type = random.choice(['Adult', 'Minor'])
@@ -39,21 +39,21 @@ class Command(BaseCommand):
         
         # Determine number of flights for the day based on passenger type and flight class
         if passenger_type == 'Adult':
-            num_flights_today = random.randint(5, 10)
+            num_flights_today = random.randint(3, 5)
         else:
-            num_flights_today = random.randint(5, 10)
+            num_flights_today = random.randint(3, 5)
         
         if flight_class == 'Business':
-            num_flights_today = random.randint(5, 10)
+            num_flights_today = random.randint(3, 5)
         else:
-            num_flights_today = random.randint(5, 10)
+            num_flights_today = random.randint(3, 5)
         
         for _ in range(num_flights_today):
             flight = Flight.objects.create(
                 airline=airline,
                 departure_location=departure_location,
                 arrival_location=arrival_location,
-                departure_datetime=departure_datetime,
+                departure_datetime=departure_date,
                 flight_duration=flight_duration,
                 base_price=base_price,
                 passenger_type=passenger_type,

@@ -29,10 +29,8 @@ class Command(BaseCommand):
         arrival_location = Location.objects.exclude(id=departure_location.id).order_by('?').first()
         
         # Set departure date within the specified range
-        start_date = datetime.datetime(2024, 5, 16)
-        end_date = datetime.datetime(2024, 12, 16)
-        departure_datetime = fake.date_time_between_dates(start_date=start_date, end_date=end_date)
-        
+        departure_datetime = fake.date_time_between(start_date="-1y", end_date="+1y")
+
         flight_duration = datetime.timedelta(hours=random.randint(1, 24), minutes=random.randint(0, 59))
         base_price = round(random.uniform(50, 1000), 2)
         passenger_type = random.choice(['Adult', 'Minor'])

@@ -23,18 +23,34 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f'{num_flights} flights generated successfully'))
 
-    def generate_random_flight(self):
-        airline = Airline.objects.order_by('?').first()
-        departure_location = Location.objects.order_by('?').first()
-        arrival_location = Location.objects.exclude(id=departure_location.id).order_by('?').first()
-        departure_datetime = fake.date_time_between(start_date="-1y", end_date="+1y")
-        flight_duration = datetime.timedelta(hours=random.randint(1, 24), minutes=random.randint(0, 59))
-        base_price = round(random.uniform(50, 1000), 2)
-        passenger_type = random.choice(['Adult', 'Minor'])
-        flight_class = random.choice(['Business', 'Economic'])
-        checked_bag_price = round(random.uniform(0, 50), 2)
-        num_tickets = random.randint(50, 300)
-
+def generate_random_flight(self):
+    airline = Airline.objects.order_by('?').first()
+    departure_location = Location.objects.order_by('?').first()
+    arrival_location = Location.objects.exclude(id=departure_location.id).order_by('?').first()
+    
+    # Set departure date within the specified range
+    start_date = datetime.datetime(2024, 5, 16)
+    end_date = datetime.datetime(2024, 12, 16)
+    departure_datetime = fake.date_time_between_dates(start_date=start_date, end_date=end_date)
+    
+    flight_duration = datetime.timedelta(hours=random.randint(1, 24), minutes=random.randint(0, 59))
+    base_price = round(random.uniform(50, 1000), 2)
+    passenger_type = random.choice(['Adult', 'Minor'])
+    flight_class = random.choice(['Business', 'Economic'])
+    checked_bag_price = round(random.uniform(0, 50), 2)
+    
+    # Determine number of flights for the day based on passenger type and flight class
+    if passenger_type == 'Adult':
+        num_flights_today = random.randint(5, 10)
+    else:
+        num_flights_today = random.randint(5, 10)
+    
+    if flight_class == 'Business':
+        num_flights_today = random.randint(5, 10)
+    else:
+        num_flights_today = random.randint(5, 10)
+    
+    for _ in range(num_flights_today):
         flight = Flight.objects.create(
             airline=airline,
             departure_location=departure_location,
@@ -56,5 +72,6 @@ class Command(BaseCommand):
                 Stopover.objects.create(flight=flight, location=stopover_location, duration=duration)
 
         # Generate tickets
+        num_tickets = random.randint(50, 300)
         for _ in range(num_tickets):
             Ticket.objects.create(flight=flight)

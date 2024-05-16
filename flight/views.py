@@ -46,7 +46,7 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
             flight_class=flight_class,
             passenger_type=passenger_type,
             tickets__is_booked=False
-        )
+        ).distinct('id')
 
         # Filter return flights
         return_flights = Flight.objects.filter(
@@ -56,7 +56,7 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
             flight_class=flight_class,
             passenger_type=passenger_type,
             tickets__is_booked=False
-        )
+        ).distinct('id')
 
         # Combine both outbound and return flights
         queryset = list(chain(outbound_flights, return_flights))
@@ -90,7 +90,7 @@ class FlightSearchAPIView(generics.ListAPIView):
             departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
             flight_class=flight_class,
             passenger_type=passenger_type,
-        )
+        ).distinct('id')
 
         # Filter out flights with zero available tickets
         queryset = queryset.filter(tickets__is_booked=False).distinct()

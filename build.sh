@@ -26,5 +26,5 @@ python manage.py migrate
 # #Create Airlines
 # python manage.py create_airlines
 
-# Populate flight
-python manage.py generate_flights 2024-05-16 30
+# # Populate flight
+# python manage.py generate_flights 2024-05-16 30

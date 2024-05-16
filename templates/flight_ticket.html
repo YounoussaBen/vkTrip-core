@@ -172,7 +172,7 @@
         <td>{{ booking.flights.first.id }}</td>
       </tr>
       <tr>
-        <td colspan="3" class="class-info">Class: {{ booking.flights.first.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Departure: {{ booking.flights.first.departure_datetime|date:"Y-m-d, H:i" }} | Duration: {{ booking.flights.first.flight_duration }} | Airline: {{ booking.flights.first.airline.name }}</td>
+        <td colspan="3" class="class-info">Class: {{ booking.flights.first.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Duration: {{ booking.flights.first.flight_duration }} | Airline: {{ booking.flights.first.airline.name }}</td>
       </tr>
       {% if booking.trip_type == "Round Trip" %}
       <tr>
@@ -181,7 +181,7 @@
         <td>{{ booking.flights.last.id }}</td>
       </tr>
       <tr>
-        <td colspan="3" class="class-info">Class: {{ booking.flights.last.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Departure: {{ booking.flights.last.departure_datetime|date:"Y-m-d, H:i" }} | Duration: {{ booking.flights.last.flight_duration }} | Airline: {{ booking.flights.last.airline.name }}</td>
+        <td colspan="3" class="class-info">Class: {{ booking.flights.last.flight_class }} | Baggage: {{ booking.checked_bags }} Piece | Duration: {{ booking.flights.last.flight_duration }} | Airline: {{ booking.flights.last.airline.name }}</td>
       </tr>
       {% endif %}
     </table>

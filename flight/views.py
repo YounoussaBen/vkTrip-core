@@ -5,7 +5,6 @@ from .serializers import FlightSerializer, LocationSerializer, AirlineSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from datetime import datetime
-from django.db.models import Q
 from itertools import chain
 
 class FlightListCreateAPIView(generics.ListCreateAPIView):
@@ -42,9 +41,9 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
         outbound_flights = Flight.objects.filter(
             departure_location__airport_name=departure_location,
             arrival_location__airport_name=arrival_location,
-            departure_datetime__date=departure_time,
+            # departure_datetime__date=departure_time,
             flight_class=flight_class,
-            passenger_type=passenger_type,
+            # passenger_type=passenger_type,
             tickets__is_booked=False
         ).distinct('id')
 
@@ -52,9 +51,9 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
         return_flights = Flight.objects.filter(
             departure_location__airport_name=arrival_location,
             arrival_location__airport_name=departure_location,
-            departure_datetime__date=return_time,
+            # departure_datetime__date=return_time,
             flight_class=flight_class,
-            passenger_type=passenger_type,
+            # passenger_type=passenger_type,
             tickets__is_booked=False
         ).distinct('id')
 
@@ -87,9 +86,9 @@ class FlightSearchAPIView(generics.ListAPIView):
         queryset = Flight.objects.filter(
             departure_location__airport_name=departure_location,
             arrival_location__airport_name=arrival_location,
-            departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
+            # departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
             flight_class=flight_class,
-            passenger_type=passenger_type,
+            # passenger_type=passenger_type,
         ).distinct('id')
 
         # Filter out flights with zero available tickets

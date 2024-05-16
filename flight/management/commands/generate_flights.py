@@ -10,28 +10,29 @@ fake = Faker()
 class Command(BaseCommand):
     help = 'Generate random flight data'
 
+    def add_arguments(self, parser):
+        parser.add_argument('start_date', type=str, help='Start date (YYYY-MM-DD)')
+        parser.add_argument('num_days', type=int, help='Number of days to generate flights')
+
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        start_date = datetime.date.today()
-        end_date = start_date + datetime.timedelta(days=30)  # Generate flights for a month
+        start_date = datetime.datetime.strptime(kwargs['start_date'], '%Y-%m-%d')
+        num_days = kwargs['num_days']
+        end_date = start_date + datetime.timedelta(days=num_days)
 
         while start_date < end_date:
-            self.generate_random_flights_for_day(start_date)
+            num_flights = random.randint(3, 5)
+            for _ in range(num_flights):
+                self.generate_random_flight(start_date)
             start_date += datetime.timedelta(days=1)
 
-        self.stdout.write(self.style.SUCCESS('Flights generated successfully for the month'))
-
-    def generate_random_flights_for_day(self, date):
-        num_flights = random.randint(3, 5)  # Generate 3-5 flights per day
-
-        for _ in range(num_flights):
-            self.generate_random_flight(date)
+        self.stdout.write(self.style.SUCCESS(f'Flights generated successfully'))
 
     def generate_random_flight(self, date):
         airline = Airline.objects.order_by('?').first()
         departure_location = Location.objects.order_by('?').first()
         arrival_location = Location.objects.exclude(id=departure_location.id).order_by('?').first()
-        departure_datetime = fake.date_time_between_dates(datetime_start=date, datetime_end=date, tzinfo=None, delta_start="-1y", delta_end="+1y")
+        departure_datetime = datetime.datetime.combine(date, fake.time_object())
         flight_duration = datetime.timedelta(hours=random.randint(1, 24), minutes=random.randint(0, 59))
         base_price = round(random.uniform(50, 1000), 2)
         passenger_type = random.choice(['Adult', 'Minor'])

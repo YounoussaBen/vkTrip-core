@@ -17,14 +17,14 @@ python manage.py collectstatic --no-input
 # Apply database migrations
 python manage.py migrate
 
-# # Create superuser if applicable
-# python manage.py createsu
+# Create superuser if applicable
+python manage.py createsu
 
-# # Import Airports
-# python manage.py import_airports data/airports_by_country.csv
+# Import Airports
+python manage.py import_airports data/airports_by_country.csv
 
-# #Create Airlines
-# python manage.py create_airlines
+#Create Airlines
+python manage.py create_airlines
 
 # # Populate flight
 # python manage.py generate_flights 2024-05-30 30

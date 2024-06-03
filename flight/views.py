@@ -1,22 +1,14 @@
 # views.py
 from rest_framework import generics, permissions
 from .models import Flight, Location, Airline
-from .serializers import FlightSerializer, LocationSerializer, AirlineSerializer
+from .serializers import FlightSerializer, LocationSerializer, AirlineSerializer, RoundTripFlightSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from datetime import datetime
-from itertools import chain
-
-class FlightListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Flight.objects.all()
-    serializer_class = FlightSerializer
-    permission_classes = [permissions.AllowAny]
-    
-    def get_queryset(self):
-        return Flight.objects.filter(tickets__is_booked=False).distinct()
+from itertools import product
 
 class RoundTripFlightSearchAPIView(generics.ListAPIView):
-    serializer_class = FlightSerializer
+    serializer_class = RoundTripFlightSerializer
     permission_classes = [permissions.AllowAny]
 
     @swagger_auto_schema(
@@ -37,28 +29,31 @@ class RoundTripFlightSearchAPIView(generics.ListAPIView):
         flight_class = self.request.query_params.get('flight_class')
         passenger_type = self.request.query_params.get('passenger_type')
 
+        # Convert departure_time and return_time to datetime.date objects
+        departure_date = datetime.strptime(departure_time, '%Y-%m-%d').date()
+        return_date = datetime.strptime(return_time, '%Y-%m-%d').date()
+
         # Filter outbound flights
         outbound_flights = Flight.objects.filter(
             departure_location__airport_name=departure_location,
             arrival_location__airport_name=arrival_location,
-            # departure_datetime__date=departure_time,
             flight_class=flight_class,
-            # passenger_type=passenger_type,
-            tickets__is_booked=False
-        ).distinct('id')
+            tickets__is_booked=False,
+            departure_datetime__date=departure_date
+        ).distinct()
 
         # Filter return flights
         return_flights = Flight.objects.filter(
             departure_location__airport_name=arrival_location,
             arrival_location__airport_name=departure_location,
-            # departure_datetime__date=return_time,
             flight_class=flight_class,
-            # passenger_type=passenger_type,
-            tickets__is_booked=False
-        ).distinct('id')
+            tickets__is_booked=False,
+            departure_datetime__date=return_date
+        ).distinct()
 
-        # Combine both outbound and return flights
-        queryset = list(chain(outbound_flights, return_flights))
+        # Create pairs of outbound and return flights
+        queryset = [{'outbound_flight': outbound, 'return_flight': return_flight}
+                    for outbound, return_flight in product(outbound_flights, return_flights)]
 
         return queryset
 
@@ -86,16 +81,22 @@ class FlightSearchAPIView(generics.ListAPIView):
         queryset = Flight.objects.filter(
             departure_location__airport_name=departure_location,
             arrival_location__airport_name=arrival_location,
-            # departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
+            departure_datetime__date=datetime.strptime(departure_time, '%Y-%m-%d').date(),
             flight_class=flight_class,
-            # passenger_type=passenger_type,
-        ).distinct('id')
+        ).distinct()
 
         # Filter out flights with zero available tickets
-        queryset = queryset.filter(tickets__is_booked=False).distinct()
+        queryset = queryset.filter(tickets__is_booked=False)
 
         return queryset
 
+class FlightListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Flight.objects.all()
+    serializer_class = FlightSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def get_queryset(self):
+        return Flight.objects.filter(tickets__is_booked=False)
 
 class FlightRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Flight.objects.all()

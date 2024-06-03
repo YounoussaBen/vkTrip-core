@@ -42,3 +42,7 @@ class FlightSerializer(serializers.ModelSerializer):
             flight.tickets.create()
 
         return flight
+
+class RoundTripFlightSerializer(serializers.Serializer):
+    outbound_flight = FlightSerializer()
+    return_flight = FlightSerializer()

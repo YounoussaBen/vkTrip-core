@@ -6,8 +6,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Get the superuser's email and password
-        admin_email = 'admin@vktrip.com'  # e.g., 'admin'
-        admin_password = 'gSdsAjgH@F3Sdh'  # e.g., 'p@ssw0rd'
+        admin_email = 'test@admin.com'  # e.g., 'admin'
+        admin_password = '1234'  # e.g., 'gSdsAjgH@F3Sdh'
         
         # Check if a user with the admin_email exists, and if not, create a superuser
         if not User.objects.filter(email=admin_email).exists():
